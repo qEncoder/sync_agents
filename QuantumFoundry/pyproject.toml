@@ -1,0 +1,10 @@
+[project]
+name = "QF_sync_agents"
+version = "0.1.0"
+description = "Collection of sync agents for the software used in QF"
+requires-python = ">=3.8"
+dependencies = ["etiket_client"]
+
+[build-system]
+requires = ["setuptools", "packaging"]
+build-backend = "setuptools.build_meta"
