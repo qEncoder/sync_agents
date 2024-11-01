@@ -14,7 +14,9 @@ root.addHandler(handler)
 from etiket_client.sync.run import run_sync_iter, sync_loop
 from etiket_client.local.database import Session 
 
-
-# sync_loop()
+# sync only one dataset
 with Session() as session:
   run_sync_iter(session)
+
+# sync all datasets
+sync_loop()

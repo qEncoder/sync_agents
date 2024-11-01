@@ -1,4 +1,4 @@
-from QF_sync_agents.SC_qubit_datastruct_v1_sync import SCSyncAgenetDataStructV1Agent
+from QF_sync_agents.characterization.sync_characterization import CharcterizationSyncCSV
 from QF_sync_agents.SC_qubit_datastruct_v1_config import SCSyncAgenetDataStructV1Config
 
 from etiket_client.sync.backends.sources import add_sync_source#, remove_sync_source
@@ -7,7 +7,8 @@ from etiket_client.python_api.scopes import get_scope_by_name
 import pathlib 
 
 # path the the measurement data of the calibration measurements
-data_path = pathlib.Path(__file__).parent / 'data'
+# data_path = pathlib.Path(__file__).parent / 'data'
+data_path = pathlib.Path('/Users/atosato/Downloads/NQCP_data_char_reformatted')
 print(data_path)
 
 if not data_path.exists():
@@ -22,4 +23,4 @@ config = SCSyncAgenetDataStructV1Config(
 )
 
 # # give a name to the sync agent (should be locally unique)
-add_sync_source('characterization_sync', SCSyncAgenetDataStructV1Agent, config, scope4upload)
+add_sync_source('characterization_sync_2', CharcterizationSyncCSV, config, scope4upload)

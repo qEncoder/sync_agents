@@ -18,7 +18,7 @@ class CharcterizationSyncCSV(SyncSourceFileBase):
     ConfigDataClass = CharacterizationConfigCSV
     MapToASingleScope = True
     LiveSyncImplemented = False
-    level = 2  # {project_name}/{subject_id}/{measurement_folder}
+    level = 3  # {project_name}/{subject_id}/{measurement_folder}
     
     @staticmethod
     def rootPath(configData: CharacterizationConfigCSV) -> pathlib.Path:
@@ -52,6 +52,7 @@ class CharcterizationSyncCSV(SyncSourceFileBase):
             # Convert CSV to xarray and upload
             try:
                 df = pd.read_csv(data_csv_path)
+                df.set_index(guess_index_columns(df), inplace=True)
                 ds = xarray.Dataset.from_dataframe(df)
                 f_info = file_info(
                     name="measurement",
@@ -83,7 +84,7 @@ def upload_file_if_exists(file_path: pathlib.Path, file_name: str, file_type: Fi
 
 def create_dataset(configData: CharacterizationConfigCSV, syncIdentifier: sync_item):
     dataset_path = pathlib.Path(configData.data_storage_location) / syncIdentifier.dataIdentifier
-    dataset_name = "Dataset"
+    dataset_name = extract_dataset_name(dataset_path)
     keywords = []
     attributes = {}
     
@@ -94,6 +95,7 @@ def create_dataset(configData: CharacterizationConfigCSV, syncIdentifier: sync_i
             with info_json_path.open("r") as f:
                 info_data = json.load(f)
                 # dataset_name = f"{info_data.get('ProtocolName', '')}"
+                info_data = {str(k): str(v) for k, v in info_data.items()}
                 attributes.update(info_data)
         except Exception:
             logger.exception(f"Error reading {info_json_path}")
@@ -125,5 +127,25 @@ def create_dataset(configData: CharacterizationConfigCSV, syncIdentifier: sync_i
 
 
 def extract_dataset_name(dataset_path: pathlib.Path) -> str:
-    parts = dataset_path.parent.name.split("_")
-    return parts[1:] if len(parts) > 1 else "Dataset"
+    parts = dataset_path.name.split("_")
+    return "_".join(parts[1:]) if len(parts) > 1 else "Dataset"
+
+
+def guess_index_columns(df):
+    """
+    Guesses the index columns of a pandas DataFrame. 
+    This is not ideal but it's what can be done if it's not specified what the axis are.
+    """
+    columns = df.columns.tolist()
+    total_rows = len(df)
+    index_columns = [columns[0]]
+
+    for col in columns[1:]:
+        num_unique_values = df[col].nunique()
+        
+        if num_unique_values <= total_rows / 2:
+            index_columns.append(col)
+        else:
+            break  # Stop adding columns when more than half the values are unique
+
+    return index_columns

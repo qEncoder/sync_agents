@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 
 # Updated sample input data with dates in October 2024
 projects_data = [
@@ -9,19 +10,19 @@ projects_data = [
                 "subject_id": "SUB123",
                 "measurements": [
                     {
-                        "datetime": datetime(2023, 10, 31, 15, 30),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type1",
                     },
                     {
-                        "datetime": datetime(2023, 11, 1, 9, 45),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type2",
                     },
                     {
-                        "datetime": datetime(2024, 10, 1, 10, 15),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type3",
                     },
                     {
-                        "datetime": datetime(2024, 10, 15, 14, 0),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type1",
                     },
                 ]
@@ -30,11 +31,11 @@ projects_data = [
                 "subject_id": "SUB124",
                 "measurements": [
                     {
-                        "datetime": datetime(2023, 10, 31, 16, 0),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type1",
                     },
                     {
-                        "datetime": datetime(2024, 10, 10, 11, 30),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type2",
                     },
                 ]
@@ -48,15 +49,15 @@ projects_data = [
                 "subject_id": "SUB200",
                 "measurements": [
                     {
-                        "datetime": datetime(2024, 10, 5, 8, 45),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type1",
                     },
                     {
-                        "datetime": datetime(2024, 10, 20, 13, 15),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type2",
                     },
                     {
-                        "datetime": datetime(2024, 10, 25, 15, 30),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type3",
                     },
                 ]
@@ -65,11 +66,11 @@ projects_data = [
                 "subject_id": "SUB201",
                 "measurements": [
                     {
-                        "datetime": datetime(2024, 10, 3, 9, 0),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type1",
                     },
                     {
-                        "datetime": datetime(2024, 10, 12, 10, 45),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type2",
                     },
                 ]
@@ -83,15 +84,15 @@ projects_data = [
                 "subject_id": "SUB300",
                 "measurements": [
                     {
-                        "datetime": datetime(2024, 10, 7, 16, 0),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type1",
                     },
                     {
-                        "datetime": datetime(2024, 10, 15, 9, 30),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type3",
                     },
                     {
-                        "datetime": datetime(2024, 10, 31, 17, 45),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type2",
                     },
                 ]
@@ -100,11 +101,11 @@ projects_data = [
                 "subject_id": "SUB301",
                 "measurements": [
                     {
-                        "datetime": datetime(2024, 10, 18, 11, 15),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type1",
                     },
                     {
-                        "datetime": datetime(2024, 10, 24, 14, 0),
+                        "datetime": datetime.now() + timedelta(seconds=random.randint(0, 60)),
                         "measurement_type": "Type3",
                     },
                 ]

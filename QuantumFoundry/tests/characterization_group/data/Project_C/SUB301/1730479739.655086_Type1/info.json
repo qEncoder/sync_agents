@@ -1,0 +1,15 @@
+{
+    "Version": "1.0",
+    "SubjectID_chip": "SUB301",
+    "SubjectID_Device": "SUB301_Device",
+    "NickName": "SUB301_Nick",
+    "Cooldown": "2024-11-01T17:48:59.655086",
+    "Setup_fridge": "FridgeX",
+    "UserID": "User123",
+    "Platform": "PlatformY",
+    "Component": "ComponentZ",
+    "Step": "Initial",
+    "SubStep": "SubInitial",
+    "ProtocolName": "Protocol1",
+    "WentNotAsExpected": false
+}
