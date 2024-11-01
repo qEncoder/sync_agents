@@ -48,7 +48,7 @@ class SCSyncAgenetDataStructV0Agent(SyncSourceFileBase):
                 
                 f_info = file_info(name = file_path.name, fileName = file,
                     created = datetime.datetime.fromtimestamp(file_path.stat().st_mtime),
-                    fileType = f_type, file_generator = "QM Calibration Software")
+                    fileType = f_type)
 
                 sync_utilities.upload_file(file_path, syncIdentifier, f_info)
                         
