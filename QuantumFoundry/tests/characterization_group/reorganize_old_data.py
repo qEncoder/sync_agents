@@ -36,7 +36,7 @@ def organize_files_by_timestamp(old_data_path: Path, new_data_path: Path):
         if file_path.is_file():  # Process only files
             # Get the file's creation time as a timestamp
             created_time = datetime.fromtimestamp(file_path.stat().st_ctime)
-            timestamp_str = created_time.strftime("%Y%m%d_%H%M%S")
+            timestamp_str = created_time.strftime("%Y%m%d-%H%M%S")
             
             # Create the folder name as timestamp_file_name
             folder_name = f"{timestamp_str}_{file_path.stem}"
@@ -60,5 +60,7 @@ def organize_files_by_timestamp(old_data_path: Path, new_data_path: Path):
 
 # Usage example
 old_data_path = Path("/Users/atosato/Downloads/bluewhale1728488315392/2024-08-26 W4_Al_resonators4_B002019D02/2024-08-26 W4_Al_resonators4_B002019D02-run1-oldprotocol")
+# old_data_path = Path('/Users/atosato/Downloads/bluewhale1728488315392/2024-08-26 W4_Al_resonators4_B002019D02/2024-08-26 W4_Al_resonators4_B002019D02-run2/data')
+# old_data_path = Path('/Users/atosato/Downloads/bluewhale1728488315392/Weight4/202405_W4Sprint-Full-002/EnergyMatrix')
 new_data_path = Path("/Users/atosato/Downloads/NQCP_data_char_reformatted")
 organize_files_by_timestamp(old_data_path, new_data_path)

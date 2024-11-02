@@ -5,6 +5,8 @@ import datetime
 import xarray
 import pandas as pd
 import logging
+import xarray as xr
+import re
 
 from etiket_client.sync.base.sync_source_abstract import SyncSourceFileBase
 from etiket_client.sync.base.sync_utilities import file_info, sync_utilities, dataset_info, sync_item, FileType
@@ -44,9 +46,23 @@ class CharcterizationSyncCSV(SyncSourceFileBase):
         # Upload metadata.json
         metadata_json_path = dataset_path / "metadata.json"
         upload_file_if_exists(metadata_json_path, "metadata.json", FileType.JSON, syncIdentifier)
+
+        data_csv_path = dataset_path / "measurement.csv"
+
+        # upload all other files
+
+        for file in dataset_path.rglob("*"):
+            if file.is_file():
+                # Apply exclusion only in the root directory (first level)
+                if file.parent == dataset_path and file in {info_json_path, metadata_json_path, data_csv_path}:
+                    continue
+                upload_file_if_exists(file, file.name, file_type_from_extension(file), syncIdentifier)
+        # for file in dataset_path.iterdir():
+        #     if file.is_file() and file not in {info_json_path, metadata_json_path, data_csv_path}:
+        #         upload_file_if_exists(file, file.name, file_type_from_extension(file), syncIdentifier)
+
         
         # Upload data.csv and convert to xarray
-        data_csv_path = dataset_path / "measurement.csv"
         if data_csv_path.exists():
             upload_file_if_exists(data_csv_path, "measurement.csv", FileType.UNKNOWN, syncIdentifier)
             # Convert CSV to xarray and upload
@@ -54,6 +70,7 @@ class CharcterizationSyncCSV(SyncSourceFileBase):
                 df = pd.read_csv(data_csv_path)
                 df.set_index(guess_index_columns(df), inplace=True)
                 ds = xarray.Dataset.from_dataframe(df)
+                ds = process_xarray_units(ds)
                 f_info = file_info(
                     name="measurement",
                     fileName="measurement.hdf5",
@@ -130,6 +147,15 @@ def extract_dataset_name(dataset_path: pathlib.Path) -> str:
     parts = dataset_path.name.split("_")
     return "_".join(parts[1:]) if len(parts) > 1 else "Dataset"
 
+def file_type_from_extension(file: pathlib.Path) -> FileType:
+    f_type = FileType.UNKNOWN
+    if file.suffix.lower()==".hdf5" or file.suffix.lower()==".h5" or file.suffix.lower()==".nc":
+        f_type = FileType.HDF5
+    if file.suffix.lower()==".json":
+        f_type = FileType.JSON
+    if file.suffix.lower()==".txt":
+        f_type = FileType.TEXT
+    return f_type
 
 def guess_index_columns(df):
     """
@@ -149,3 +175,36 @@ def guess_index_columns(df):
             break  # Stop adding columns when more than half the values are unique
 
     return index_columns
+
+
+# Define the function to extract name and units
+def extract_name_and_units(label):
+    match = re.match(r"(.*?)(?:\s*\((.*?)\))?$", label)
+    name = match.group(1).strip() if match else label
+    units = match.group(2).strip() if match and match.group(2) else None
+    return name, units
+
+
+def process_xarray_units(ds):
+    '''Rename variables and coordinates in the existing dataset and add units as attributes.'''
+    # Rename data variables
+    data_var_renames = {}
+    for name, dataarray in ds.data_vars.items():
+        new_name, units = extract_name_and_units(name)
+        data_var_renames[name] = new_name
+        if units:
+            ds[name].attrs['units'] = units
+    
+    ds = ds.rename_vars(data_var_renames)
+    
+    # Rename coordinates
+    coord_renames = {}
+    for name, dataarray in ds.coords.items():
+        new_name, units = extract_name_and_units(name)
+        coord_renames[name] = new_name
+        if units:
+            ds[name].attrs['units'] = units
+    
+    ds = ds.rename(coord_renames)
+
+    return ds
