@@ -1,0 +1,12 @@
+root_folder : /users/stephan/Downloads/
+attributes : 
+  - Initials : DSDK
+  - SubjectID : A001B001
+keywords : [] # Optional
+folders:
+  - "1_Resonators/$SubjectID/0_Design/"
+  - "1_Resonators/$SubjectID/1_Exposure/"
+  - "1_Resonators/$SubjectID/2_OpticalImages/0_Cleaning/"
+  - "1_Resonators/$SubjectID/2_OpticalImages/1_Development/"
+  - "1_Resonators/$SubjectID/2_OpticalImages/2_Etch/1_PostEtch/"
+  - "1_Resonators/$SubjectID/2_OpticalImages/2_Etch/2_PostStrip/"
