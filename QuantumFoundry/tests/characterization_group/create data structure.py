@@ -7,6 +7,11 @@ import numpy as np
 
 from mock_data_structure import projects_data
 
+
+# base_dir = Path(__file__).parent / 'data'
+base_dir = Path(r'C:\Users\atosato\Downloads\test_sync')
+
+
 # Function to generate folder structure and files
 def create_folder_structure(projects):
     for project in projects:
@@ -20,9 +25,8 @@ def create_folder_structure(projects):
                 measurement_type = measurement["measurement_type"]
                 
                 # Define folder path
-                base_dir = Path(__file__).parent
                 print(base_dir)
-                folder_path = base_dir / Path(f"data/{project_name}/{subject_id}/{datetime_str}_{measurement_type}")
+                folder_path = base_dir / Path(f"{project_name}/{subject_id}/{datetime_str}_{measurement_type}")
                 folder_path.mkdir(parents=True, exist_ok=True)
                 
                 # Create info.json

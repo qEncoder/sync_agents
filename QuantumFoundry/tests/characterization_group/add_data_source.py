@@ -8,14 +8,14 @@ import pathlib
 
 # path the the measurement data of the calibration measurements
 # data_path = pathlib.Path(__file__).parent / 'data'
-data_path = pathlib.Path('/Users/atosato/Downloads/NQCP_data_char_reformatted')
+data_path = pathlib.Path(r'C:\Users\atosato\Downloads\test_sync')
 print(data_path)
 
 if not data_path.exists():
     raise ValueError(f"Data path {data_path} does not exist. Please correct the path.")
 
 # scope to which the data will be uploaded
-scope4upload = get_scope_by_name('test_data_characterization')
+scope4upload = get_scope_by_name('Test_scope')
 
 # sample name and set up will be added to every dataset that is uploaded from this location
 config = CharacterizationConfigCSV(
