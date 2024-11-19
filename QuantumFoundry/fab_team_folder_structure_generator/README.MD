@@ -39,7 +39,7 @@ Fields:
 - attributes : Defines attributes to be added.
 - keywords : Optional list of keywords to add.
 - skip : Optional list of patterns to skip during upload (e.g., "*.json" to skip all JSON files).
-- folders : List of folder paths. Variables (e.g., $SubjectID) will be replaced with values from the attributes section. An error will be raised if the attribute is not present.
+- folders : List of folder paths. Variables, defined by a leading $ token (e.g., $SubjectID), will be replaced with values from the attributes section. An error will be raised if the requested attribute is not present.
 
 The folder_maker.py file
 ------------------------
