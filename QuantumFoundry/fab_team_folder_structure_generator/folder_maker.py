@@ -1,26 +1,25 @@
-import re, yaml, pathlib, copy
+from qdrive.dataset import generate_dataset_info, QH_DATASET_INFO_FILE
+
+import re, yaml, pathlib
 
 valid_folder_name = re.compile(r'^[a-zA-Z0-9$][a-zA-Z0-9_\/\\$]+[\/\\]$')
 variable_name_in_folder = re.compile(r'[$][a-zA-Z0-9_]+[\/\\]')
 
 def create_folders():
-    with open('folder_config.yaml', 'r') as file:
+    with open('folder_config.yaml', 'r', encoding='utf-8') as file:
         config = yaml.safe_load(file)
     
     try :
         root_folder = pathlib.Path(config['root_folder'])
-    except KeyError:
-        raise ValueError("root_folder key not found in the YAML file.")
+    except KeyError as e:
+        raise ValueError("root_folder key not found in the YAML file.") from e
         
     if not root_folder.exists():
         raise ValueError(f"Data path {root_folder} does not exist. Please provide the correct path.")
 
     attributes = {k:v for attr in config['attributes'] for k,v in attr.items()}
-    
-    QH_dataset_info_base = {}
-    QH_dataset_info_base['version'] = '0.1'
-    QH_dataset_info_base['attributes'] = attributes
-    QH_dataset_info_base['keywords'] = [] if 'keywords' not in config else config['keywords']
+    keywords = [] if 'keywords' not in config else config['keywords']
+
     folders = config['folders']
     
     folders_validated = []
@@ -50,19 +49,22 @@ def create_folders():
         else:
             folder_path.mkdir(parents=True, exist_ok=True)
             print(f"Folder created: {folder}")
-        
-        QH_dataset_info = copy.deepcopy(QH_dataset_info_base)
-        QH_dataset_info['expected_path'] = str(folder_path)
-        QH_dataset_info['keywords'] += extract_keywords_from_path(folder)
-        
-        yaml_file_path = folder_path / '_QH_dataset_info.yaml'
+                
+        yaml_file_path = folder_path / QH_DATASET_INFO_FILE
         exists = yaml_file_path.exists()
-        with open(yaml_file_path, 'w') as yaml_file:
-            yaml.dump(QH_dataset_info, yaml_file)
+        
+        generate_dataset_info(folder_path,
+                              dataset_name=None,
+                              description=None,
+                              attributes=attributes,
+                              keywords=keywords + extract_keywords_from_path(folder),
+                              converters=None,
+                              skip=config.get('skip', None))
+        
         if exists:
-            print(f"\t _QH_dataset_info.yaml updated")
+            print(f"\t {QH_DATASET_INFO_FILE} updated")
         else:
-            print(f"\t _QH_dataset_info.yaml added")
+            print(f"\t {QH_DATASET_INFO_FILE} added")
 
 def extract_keywords_from_path(folder : str):
     items = re.split(r'[_/]', folder)

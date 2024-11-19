@@ -1,8 +1,9 @@
-root_folder : /users/stephan/Downloads/
+root_folder : N:/SCI-NBI-Cleanroom/NQCP/SC-platform
 attributes : 
   - Initials : DSDK
   - SubjectID : A001B001
 keywords : [] # Optional
+skip : [] # Optional
 folders:
   - "1_Resonators/$SubjectID/0_Design/"
   - "1_Resonators/$SubjectID/1_Exposure/"

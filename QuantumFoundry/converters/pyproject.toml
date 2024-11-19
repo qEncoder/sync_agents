@@ -1,0 +1,10 @@
+[project]
+name = "QF_converters"
+version = "0.1.0"
+description = "Collection of converters for the research at Quantum Foundry"
+requires-python = ">=3.8"
+dependencies = ["etiket_client"]
+
+[build-system]
+requires = ["setuptools", "packaging"]
+build-backend = "setuptools.build_meta"
